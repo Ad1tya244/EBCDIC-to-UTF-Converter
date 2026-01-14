@@ -35,17 +35,14 @@ The application allows users to upload EBCDIC-encoded files, processes them safe
 ---
 
 ## 🏗️ System Architecture
-User (Web Browser)
--->
-Flask Web Application (app.py)
+1. User (Web Browser)
+2. Flask Web Application (app.py)
 - File Upload Handler
 - Encoding Detection (chardet)
 - Data Processing (pandas, numpy)
 - EBCDIC → UTF Conversion Logic (convert.py)
--->
-UTF Encoded Output File (zip)
--->
-Download to User System
+3. UTF Encoded Output File (zip)
+4. Download to User System
 
 ---
 
