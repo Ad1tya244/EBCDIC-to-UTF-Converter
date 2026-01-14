@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EBCDIC → Unicode Converter</title>
+<link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+<div class="container">
+  <h1>EBCDIC → Unicode Converter</h1>
+
+  <form id="converter-form" enctype="multipart/form-data">
+
+    <!-- File upload -->
+    <div class="file-upload-inline">
+      <label for="ebcdic-files">Upload EBCDIC Files:</label>
+      <input type="file" id="ebcdic-files" name="files" multiple required accept=".ebc">
+    </div>
+
+    <!-- Encoding selection -->
+    <div class="encodings-inline">
+      <div class="encoding-block">
+        <label for="source-encoding">Source Encoding:</label>
+        <input list="source-options" name="encoding" id="source-encoding" placeholder="Auto Detect">
+        <datalist id="source-options">
+          <option value="auto">
+          {% for enc in known_encodings %}
+          <option value="{{ enc }}">
+          {% endfor %}
+        </datalist>
+      </div>
+
+      <div class="encoding-block">
+        <label for="dest-encoding">Destination Encoding:</label>
+        <select name="dest_encoding" id="dest-encoding">
+          <option value="">Adaptive</option>
+          <option value="utf-8">UTF-8</option>
+          <option value="utf-16">UTF-16</option>
+          <option value="utf-32">UTF-32</option>
+        </select>
+      </div>
+    </div>
+
+    <button type="submit" class="btn">Convert</button>
+  </form>
+
+  <div id="progress-container"></div>
+  <div id="results-container"></div>
+</div>
+
+<script src="/static/scripts.js"></script>
+</body>
+</html>

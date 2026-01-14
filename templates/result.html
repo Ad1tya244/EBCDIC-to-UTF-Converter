@@ -1,0 +1,10 @@
+{% for result in results %}
+<div class="result-card">
+  <h3>{{ result.filename }}</h3>
+  <p>Detected Source Encoding: <strong>{{ result.used_encoding }}</strong></p>
+  <p>Replacement Characters: {{ result.replacement_count }}</p>
+  <div class="download-buttons">
+    <a href="{{ result.zip_download }}" class="btn download">Download UTF + Report (ZIP)</a>
+  </div>
+</div>
+{% endfor %}

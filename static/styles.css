@@ -1,0 +1,148 @@
+/* Dark Mode Aesthetic */
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: #121212;
+    color: #e0e0e0;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+}
+
+/* Container */
+.container {
+    margin: 60px auto;
+    max-width: 700px;
+    padding: 30px;
+    background: #1e1e1e;
+    border-radius: 20px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
+}
+
+/* Headings */
+h1, h2 {
+    color: #ffffff;
+    margin-bottom: 20px;
+}
+
+/* File Upload Centered */
+.file-upload-inline {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 15px 0 25px 0;
+    gap: 12px;
+}
+
+input[type="file"] {
+    padding: 12px;
+    border-radius: 10px;
+    border: 1px solid #333;
+    background: #2a2a2a;
+    color: #e0e0e0;
+    cursor: pointer;
+    transition: 0.3s ease;
+}
+
+input[type="file"]:hover {
+    background: #333;
+}
+
+/* Encoding selects side-by-side */
+.encodings-inline {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    margin-bottom: 15px;
+}
+
+/* Label and input/select inline */
+.encoding-block {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
+}
+
+.encoding-block label {
+    display: inline-block;
+    white-space: nowrap;
+}
+
+/* Make source and destination boxes identical */
+#source-encoding,
+#dest-encoding {
+    padding: 12px;
+    border-radius: 10px;
+    border: 1px solid #333;
+    background: #2a2a2a;
+    color: #e0e0e0;
+    cursor: pointer;
+    transition: 0.3s ease;
+    width: 180px;
+}
+
+#source-encoding:hover,
+#dest-encoding:hover {
+    background: #333;
+}
+
+/* Upload & Action Buttons */
+button, .btn {
+    background: linear-gradient(135deg, #4a6cf7, #6a5acd);
+    border: none;
+    color: white;
+    padding: 12px 24px;
+    border-radius: 12px;
+    font-size: 16px;
+    margin: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    display: inline-block;
+    box-shadow: 0 4px 12px rgba(74, 108, 247, 0.25);
+}
+
+button:hover, .btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(74, 108, 247, 0.4);
+    background: linear-gradient(135deg, #5c7cff, #7a6dff);
+}
+
+/* Results */
+.result-card {
+    background: #1a1a1a;
+    border-radius: 14px;
+    padding: 20px;
+    margin: 20px 0;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+}
+
+/* Download buttons centered */
+.download-buttons {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+/* Progress Bar */
+.progress-bar {
+    width: 100%;
+    background: #2a2a2a;
+    border-radius: 8px;
+    margin-top: 15px;
+    overflow: hidden;
+    height: 18px;
+}
+
+.progress-fill {
+    width: 0%;
+    background: linear-gradient(135deg, #4a6cf7, #6a5acd);
+    height: 100%;
+    color: white;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: width 0.3s linear;
+}

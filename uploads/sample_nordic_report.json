@@ -1,0 +1,9 @@
+{
+  "input_file": "uploads/sample_nordic.ebc",
+  "output_file": "uploads/sample_nordic_utf-8.txt",
+  "source_encoding": "cp037",
+  "destination_encoding": "UTF-8",
+  "input_bytes": 38,
+  "output_bytes": 48,
+  "replacement_characters": 0
+}
