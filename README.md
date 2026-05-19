@@ -1,7 +1,7 @@
 # EBCDIC to UTF Converter – Mainframe Data Integrity Solution
 
 ## 📌 Project Title
-EBCDIC to UTF Conversion System for Reducing Character Corruption in Mainframe Data Transfers
+EBCDIC to UTF Conversion System for Reducing Character Corruption in Mainframe Data
 
 ---
 
