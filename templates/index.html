@@ -4,48 +4,126 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>EBCDIC → Unicode Converter</title>
+<!-- Google Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/static/styles.css">
 </head>
 <body>
+
+<!-- Ambient Glowing Orbs -->
+<div class="ambient-glow glow-1"></div>
+<div class="ambient-glow glow-2"></div>
+
 <div class="container">
-  <h1>EBCDIC → Unicode Converter</h1>
+  
+  <!-- Header Section -->
+  <div class="header-area">
+    <div class="header-icon">
+      <!-- Mainframe / Database Exchange SVG Icon -->
+      <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M4 10h16M4 14h16M4 6h16M4 18h16" />
+        <rect x="2" y="3" width="20" height="18" rx="2" />
+      </svg>
+    </div>
+    <h1>EBCDIC → Unicode Converter</h1>
+    <p class="subtitle">Convert IBM mainframe EBCDIC files to standard Unicode formats safely while preserving data integrity.</p>
+  </div>
 
   <form id="converter-form" enctype="multipart/form-data">
 
-    <!-- File upload -->
-    <div class="file-upload-inline">
-      <label for="ebcdic-files">Upload EBCDIC Files:</label>
-      <input type="file" id="ebcdic-files" name="files" multiple required accept=".ebc">
+    <!-- Premium Interactive Dropzone -->
+    <div class="drop-zone" id="drop-zone">
+      <span class="drop-zone__prompt">
+        <!-- Modern Cloud/File Upload SVG Icon -->
+        <svg class="upload-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+          <polyline points="17 8 12 3 7 8" />
+          <line x1="12" y1="3" x2="12" y2="15" />
+        </svg>
+        <span class="drop-text">Drag & drop your <code>.ebc</code> files here or <span class="browse-link">browse</span></span>
+        <span class="drop-subtext">Select one or more EBCDIC files (up to 50MB)</span>
+      </span>
+      <input type="file" id="ebcdic-files" name="files" multiple required accept=".ebc" class="drop-zone__input">
     </div>
 
-    <!-- Encoding selection -->
+    <!-- Live Selected Files Preview list (Initially Hidden) -->
+    <div id="file-list-container" class="file-list-container hidden">
+      <h4>Selected Files</h4>
+      <div id="file-list" class="file-list"></div>
+    </div>
+
+    <!-- Parameter Config Section -->
     <div class="encodings-inline">
+      
+      <!-- Source Encoding Input with Datalist -->
       <div class="encoding-block">
-        <label for="source-encoding">Source Encoding:</label>
-        <input list="source-options" name="encoding" id="source-encoding" placeholder="Auto Detect">
-        <datalist id="source-options">
-          <option value="auto">
-          {% for enc in known_encodings %}
-          <option value="{{ enc }}">
-          {% endfor %}
-        </datalist>
+        <label for="source-encoding">
+          <!-- Code/Terminal SVG Icon -->
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="16 18 22 12 16 6" />
+            <polyline points="8 6 2 12 8 18" />
+          </svg>
+          Source Encoding:
+        </label>
+        <div class="input-wrapper">
+          <!-- Text Document SVG Icon -->
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+            <polyline points="14 2 14 8 20 8" />
+          </svg>
+          <input list="source-options" name="encoding" id="source-encoding" placeholder="Auto Detect">
+          <datalist id="source-options">
+            <option value="auto">
+            {% for enc in known_encodings %}
+            <option value="{{ enc }}">
+            {% endfor %}
+          </datalist>
+        </div>
       </div>
 
+      <!-- Destination Encoding Dropdown Selector -->
       <div class="encoding-block">
-        <label for="dest-encoding">Destination Encoding:</label>
-        <select name="dest_encoding" id="dest-encoding">
-          <option value="">Adaptive</option>
-          <option value="utf-8">UTF-8</option>
-          <option value="utf-16">UTF-16</option>
-          <option value="utf-32">UTF-32</option>
-        </select>
+        <label for="dest-encoding">
+          <!-- Globe / Universal Translation SVG Icon -->
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10" />
+            <line x1="2" y1="12" x2="22" y2="12" />
+            <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
+          </svg>
+          Destination Encoding:
+        </label>
+        <div class="input-wrapper select-wrapper">
+          <!-- Globe SVG Icon -->
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+          </svg>
+          <select name="dest_encoding" id="dest-encoding">
+            <option value="">Adaptive (Auto-Select UTF)</option>
+            <option value="utf-8">UTF-8</option>
+            <option value="utf-16">UTF-16</option>
+            <option value="utf-32">UTF-32</option>
+          </select>
+        </div>
       </div>
+
     </div>
 
-    <button type="submit" class="btn">Convert</button>
+    <!-- Dynamic Submit CTA Button -->
+    <button type="submit" class="btn" id="convert-btn">
+      <span>Convert Files</span>
+      <!-- Arrow Right SVG Icon -->
+      <svg class="btn-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="9 18 15 12 9 6" />
+      </svg>
+    </button>
   </form>
 
+  <!-- Progress Bar Placeholder -->
   <div id="progress-container"></div>
+  
+  <!-- Conversion Results Grid Placeholder -->
   <div id="results-container"></div>
 </div>
 
