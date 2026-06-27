@@ -5,7 +5,8 @@ app.py - Flask Web UI for EBCDIC → Unicode converter (extended)
 
 import os
 import zipfile
-from flask import Flask, request, render_template, send_from_directory, jsonify
+import io
+from flask import Flask, request, render_template, jsonify, send_file
 from werkzeug.utils import secure_filename
 from convert import convert_file, EBCDIC_ENCODINGS
 
@@ -16,6 +17,7 @@ app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
 app.config["MAX_CONTENT_LENGTH"] = 50 * 1024 * 1024  # 50 MB
 
 ALLOWED_EXTENSIONS = {"ebc"}
+PROTECTED_FILES = {"sample_nordic.ebc", "large_nordic_cp500.ebc", "large_nordic_cp037.ebc"}
 
 
 def allowed_file(filename):
@@ -40,14 +42,56 @@ def is_probably_ebcdic(filepath):
     return valid_count > 0
 
 
+def cleanup_old_uploads():
+    """Removes all non-protected files in the uploads folder to avoid disk clutter."""
+    if not os.path.exists(UPLOAD_FOLDER):
+        return
+    for filename in os.listdir(UPLOAD_FOLDER):
+        if filename in PROTECTED_FILES:
+            continue
+        file_path = os.path.join(UPLOAD_FOLDER, filename)
+        if os.path.isfile(file_path):
+            try:
+                os.remove(file_path)
+            except Exception as e:
+                app.logger.error(f"Error deleting leftover file {file_path}: {e}")
+
+
 @app.route('/uploads/<path:filename>')
 def uploaded_file(filename):
-    return send_from_directory(UPLOAD_FOLDER, filename, as_attachment=True)
+    filepath = os.path.join(UPLOAD_FOLDER, filename)
+    if not os.path.exists(filepath):
+        return "File not found", 404
+
+    # Read file content into memory
+    with open(filepath, "rb") as f:
+        file_bytes = f.read()
+
+    # Clean up converted zip and source ebc files on disk immediately
+    if filename.endswith("_converted.zip"):
+        try:
+            os.remove(filepath)
+            ebc_filename = filename.replace("_converted.zip", ".ebc")
+            ebc_path = os.path.join(UPLOAD_FOLDER, ebc_filename)
+            if ebc_filename not in PROTECTED_FILES and os.path.exists(ebc_path):
+                os.remove(ebc_path)
+        except Exception as e:
+            app.logger.error(f"Error cleaning up files on download: {e}")
+
+    return send_file(
+        io.BytesIO(file_bytes),
+        mimetype="application/zip" if filename.endswith(".zip") else "application/octet-stream",
+        as_attachment=True,
+        download_name=filename
+    )
 
 
 @app.route("/", methods=["GET", "POST"])
 def index():
     if request.method == "POST":
+        # Clean up any leftover files from previous sessions
+        cleanup_old_uploads()
+
         files = request.files.getlist("files")
         ccsid = request.form.get("encoding", "auto")
         dest_encoding = request.form.get("dest_encoding") or "utf-8"
@@ -89,12 +133,21 @@ def index():
                 zipf.write(result["output_path"], os.path.basename(result["output_path"]))
                 zipf.write(report_path, os.path.basename(report_path))
 
+            # Remove intermediate text and report files from server disk immediately
+            try:
+                if os.path.exists(result["output_path"]):
+                    os.remove(result["output_path"])
+                if os.path.exists(report_path):
+                    os.remove(report_path)
+            except Exception as e:
+                app.logger.error(f"Error removing intermediate files: {e}")
+
             results.append({
                 "filename": filename,
                 "zip_download": f"/uploads/{zip_filename}",
                 "replacement_count": result["replacement_count"],
                 "used_encoding": result["used_encoding"],
-                "dest_encoding": dest_encoding.upper()  # <-- added destination encoding
+                "dest_encoding": dest_encoding.upper()
             })
 
         return jsonify(results)
