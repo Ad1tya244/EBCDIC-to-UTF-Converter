@@ -96,4 +96,4 @@ Install the following Python libraries inside a virtual environment:
 ---
 
 ## 👨‍💻 Author
-Developed as part of a system integration and data integrity solution focused on mainframe encoding challenges.
+Developed as part of a system integration and data integrity solution focused on mainframe encoding challenges. This project explores reliable character encoding conversion and compatibility between legacy and modern systems.
